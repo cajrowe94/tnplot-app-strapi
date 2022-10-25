@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plots",
+  "info": {
+    "singularName": "plot",
+    "pluralName": "plots",
+    "displayName": "Plot",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "plot_type": {
+      "type": "string"
+    },
+    "plot_protocol": {
+      "type": "string"
+    },
+    "plot_survey_date": {
+      "type": "date"
+    },
+    "plot_crew_one": {
+      "type": "string"
+    },
+    "plot_crew_two": {
+      "type": "string"
+    },
+    "plot_crew_three": {
+      "type": "string"
+    },
+    "plot_crew_four": {
+      "type": "string"
+    },
+    "county": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::county.county"
+    },
+    "plot_number": {
+      "type": "integer"
+    }
+  }
+}

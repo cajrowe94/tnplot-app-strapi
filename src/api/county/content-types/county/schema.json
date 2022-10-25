@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "counties",
+  "info": {
+    "singularName": "county",
+    "pluralName": "counties",
+    "displayName": "County",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "county_name": {
+      "type": "string"
+    },
+    "plots": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::plot.plot"
+    }
+  }
+}

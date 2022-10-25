@@ -9,5 +9,8 @@ module.exports = ({ env }) => ({
       password: env('DATABASE_PASSWORD', 'root'),
       ssl: env.bool('DATABASE_SSL', false),
     },
+    pool: {
+      min: 0
+    }
   },
 });
