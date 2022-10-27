@@ -13,14 +13,15 @@ import File from '@strapi/icons/File';
 
 const HomePage = () => {
     const [loadingMediaFiles, setLoadingMediaFiles] = useState(false);
-    const [mediaFiles, setMediaFiles] = useState(null);
+    const [mediaFiles, setMediaFiles] = useState([]);
+    const [selectValue, setSelectValue] = useState();
 
     /**
      * Load media files for select
      */
     
     useEffect(() => {
-        if (!mediaFiles) {
+        if (!mediaFiles.length) {
             loadMediaFiles();
         }
     }, []);
@@ -36,7 +37,7 @@ const HomePage = () => {
         })
         .then(response => response.json())
         .then(data => {
-            if (data & data.length) {
+            if (data && data.length) {
                 setMediaFiles(data);
             }
 
@@ -48,6 +49,10 @@ const HomePage = () => {
         })
     }
 
+    const sendFileToUpdate = () => {
+        console.log(selectValue);
+    }
+
     return (
         <Layout>
             <BaseHeaderLayout
@@ -56,16 +61,22 @@ const HomePage = () => {
             />
 
             <ContentLayout>
-                {/* Select file */}
                 <Select
                     label="Choose file"
                     placeholder="Nothing selected"
+                    value={selectValue}
+                    onChange={setSelectValue}
+
                 >
-                    <Option>Test</Option>
+                    {
+                        mediaFiles.length > 0 &&
+                        mediaFiles.map((item, i) => {
+                            return <Option key={i} value={item.id}>{item.name}</Option>
+                        })
+                    }
                 </Select>
 
-            {/* Update data button */}
-            <Button>Update plot data</Button>
+            { selectValue && <Button onClick={sendFileToUpdate} style={{ marginTop: '20px' }}>Update plot data</Button> }
 
             </ContentLayout>
         </Layout>

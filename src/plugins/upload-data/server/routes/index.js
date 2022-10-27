@@ -7,4 +7,9 @@ module.exports = [
       policies: [],
     },
   },
+  {
+    method: 'POST',
+    path: '/update-plot-data',
+    handler: 'updatePlotDataController.updatePlotData'
+  }
 ];
