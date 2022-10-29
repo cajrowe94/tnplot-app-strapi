@@ -1,15 +1,11 @@
 module.exports = [
-  {
-    method: 'GET',
-    path: '/',
-    handler: 'myController.index',
-    config: {
-      policies: [],
-    },
-  },
-  {
-    method: 'POST',
-    path: '/update-plot-data',
-    handler: 'updatePlotDataController.updatePlotData'
-  }
+	{
+		method: 'POST',
+		path: '/update-plot-data',
+		handler: 'plotData.updateData',
+		config: {
+			auth: false,
+			policies: []
+		}
+	}
 ];

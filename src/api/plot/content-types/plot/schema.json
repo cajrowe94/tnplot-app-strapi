@@ -12,25 +12,25 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "plot_type": {
+    "plotType": {
       "type": "string"
     },
-    "plot_protocol": {
+    "plotProtocol": {
       "type": "string"
     },
-    "plot_survey_date": {
+    "plotSurveyDate": {
       "type": "date"
     },
-    "plot_crew_one": {
+    "plotCrewOne": {
       "type": "string"
     },
-    "plot_crew_two": {
+    "plotCrewTwo": {
       "type": "string"
     },
-    "plot_crew_three": {
+    "plotCrewThree": {
       "type": "string"
     },
-    "plot_crew_four": {
+    "plotCrewFour": {
       "type": "string"
     },
     "county": {
@@ -38,7 +38,7 @@
       "relation": "oneToOne",
       "target": "api::county.county"
     },
-    "plot_number": {
+    "plotNumber": {
       "type": "integer"
     }
   }

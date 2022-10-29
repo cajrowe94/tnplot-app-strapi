@@ -32,7 +32,7 @@ const HomePage = () => {
         fetch('http://localhost:1337/api/upload/files', {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + process.env.STRAPI_ADMIN_BEARER_TOKEN
+                'Authorization': 'Bearer ' + process.env.STRAPI_ADMIN_JWT_DEV_TOKEN
             }
         })
         .then(response => response.json())

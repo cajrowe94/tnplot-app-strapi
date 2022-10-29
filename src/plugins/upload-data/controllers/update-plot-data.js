@@ -1,15 +1,15 @@
 'use strict';
 
 /**
- * A set of functions called "actions" for `update-plot-data`
+ * A set of functions called "actions" for `test`
  */
 
 module.exports = {
-  updatePlotData: async (ctx, next) => {
+  exampleAction: async (ctx, next) => {
     try {
-      ctx.body = 'ok';
+        ctx.body = 'ok';
     } catch (err) {
-      ctx.body = err;
+        ctx.body = err;
     }
   }
 };

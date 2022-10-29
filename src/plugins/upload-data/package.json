@@ -8,7 +8,6 @@
     "kind": "plugin",
     "displayName": "Update Plot Data"
   },
-  "dependencies": {},
   "author": {
     "name": "A Strapi developer"
   },
@@ -21,5 +20,9 @@
     "node": ">=14.19.1 <=18.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.1.3",
+    "node-xlsx": "^0.21.0"
+  }
 }
