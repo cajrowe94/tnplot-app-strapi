@@ -7,6 +7,10 @@ const getFileById = async (fileId) => {
 	return response.data;
 }
 
+/**
+ * Parse xlsx file into usable json
+ */
+
 const parseFile = (fileObject) => {
 	if (
 		fileObject &&
@@ -25,7 +29,64 @@ const parseFile = (fileObject) => {
 	}
 }
 
-const updatePlotData = async (parsedPlotData) => {
+/**
+ * Update plot data
+ * Will also update any county rows with new plots
+ */
+
+const handleUpdates = async (parsedPlotData) => {
+    let response = [];
+
+    if (parsedPlotData.length) {
+		for (const item of parsedPlotData) {
+			let plot = await getPlot(item);
+			let county = await getCounty(item);
+
+			// missing county row
+			if (!county) {
+				response.push({ error: `Missing county: ${item[0]}, for plot number: ${item[1]}` });
+			} else if (plot && county) {
+
+			} else {
+				response.push({ error: `Something went wrong with row with plot number: ${item[1]}` });
+			}
+
+			response = response.concat(...plot);
+    	}
+
+    	return response;
+    }
+}
+
+/**
+ * Query for county row
+ */
+
+const getCounty = async (item) => {
+	const countyName = 0;
+
+	if (
+		item &&
+		item[countyName]
+	) {
+		const county = await strapi.entityService.findMany('api::county.county', {
+			fields: [
+				'countyName',
+			],
+			filters: {
+				countyName: item[countyName],
+			}
+		});
+	} else {
+		return null;
+	}
+}
+
+/**
+ * Query for plot row
+ */
+
+const getPlot = async (item) => {
 	const countyName = 0,
         plotNumber = 1,
         plotType = 2,
@@ -36,12 +97,49 @@ const updatePlotData = async (parsedPlotData) => {
         plotCrewThree = 7,
         plotCrewFour = 8;
 
-    let response = {};
+    if (item) {
+    	let parsedPlotNumber = parseInt(item[plotNumber]);
+		let plotCountyName = item[countyName];
 
-    if (parsedPlotData.length) {
-    	parsedPlotData.forEach(item => {
-    		
-    	});
+		if (
+			parsedPlotNumber &&
+			plotCountyName
+		) {
+			try {
+				const plot = await strapi.entityService.findMany('api::plot.plot', {
+					fields: [
+						'plotNumber',
+						'plotType',
+						'plotProtocol',
+						'plotSurveyDate',
+						'plotCrewOne',
+						'plotCrewTwo',
+						'plotCrewThree',
+						'plotCrewFour',
+					],
+					filters: {
+						plotNumber: parseInt(item[plotNumber]),
+					},
+					populate: {
+						county: {
+							filters: {
+								countyName: {
+									$eq: item[countyName]
+								}
+							}
+						}
+					},
+	    		});
+
+	    		return plot;
+			} catch(err) {
+				return [{ error: err.message }];
+			}
+		} else {
+			return [{ error: `Invalid row with plot number: ${item[plotNumber]}, county name: ${item[countyName]}` }];
+		}
+    } else {
+    	return null;
     }
 }
 
@@ -61,10 +159,10 @@ module.exports = {
 				// parse out the raw data
 				const parsedFile = parseFile(file);
 
-				// update the rows with the parsed data
-				const updateResponse = await updatePlotData(parsedFile);
+				// initialize updates
+				const updateResponse = await handleUpdates(parsedFile);
 
-				ctx.body = parsedFile;
+				ctx.body = updateResponse;
 			} else {
 				ctx.body = {
 					'message': 'fileId required'
