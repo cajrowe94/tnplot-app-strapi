@@ -20,7 +20,8 @@ const parseFile = (fileObject) => {
 		fileObject &&
 		fileObject.url
 	) {
-		const parsedData = xlsx.parse(`/opt/app/public/${fileObject.url}`, { raw: false });
+		// const parsedData = xlsx.parse(`/opt/app/public/${fileObject.url}`, { raw: false }); // docker
+		const parsedData = xlsx.parse(`public${fileObject.url}`, { raw: false }); // local
 
 		if (
 			parsedData &&
@@ -337,7 +338,7 @@ module.exports = {
 	updateData: async (ctx) => {
 		try {
 
-			let requestBody = ctx.request.body;
+			let requestBody = JSON.parse(ctx.request.body);
 
 			if (
 				requestBody &&
