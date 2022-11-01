@@ -18,9 +18,6 @@
     "plotProtocol": {
       "type": "string"
     },
-    "plotSurveyDate": {
-      "type": "date"
-    },
     "plotCrewOne": {
       "type": "string"
     },
@@ -40,6 +37,12 @@
     },
     "plotNumber": {
       "type": "integer"
+    },
+    "plotId": {
+      "type": "string"
+    },
+    "plotSurveyDate": {
+      "type": "string"
     }
   }
 }
