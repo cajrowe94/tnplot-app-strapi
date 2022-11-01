@@ -2,6 +2,10 @@ const config = require('../config');
 const axios = require('axios');
 const xlsx = require('node-xlsx');
 
+/**
+ * Get media file
+ */
+
 const getFileById = async (fileId) => {
 	const response = await axios.get(`${config.baseUrl}/api/upload/files/${fileId}`, config.apiAuth);
 	return response.data;
@@ -48,7 +52,14 @@ const handleUpdates = async (parsedPlotData) => {
 			} else if (plot.length && county.length) {
 				// we have both a plot and county
 				let updatePlotResponse = await updatePlot(plot, county, item);
-				response.push({ relationUpdate: updatePlotResponse });
+				let updateCountyResponse = await updateCounty(plot, county, item);
+
+				response.push({
+					updates: {
+						plot: updatePlotResponse,
+						county: updateCountyResponse
+					}
+				});
 			} else {
 				response.push({ error: `Something went wrong with plot number: ${item[1]}, for county: ${item[0]}` });
 			}
@@ -56,6 +67,48 @@ const handleUpdates = async (parsedPlotData) => {
 
     	return response;
     }
+}
+
+/**
+ * Handle county update
+ */
+
+const updateCounty = async (plot, county, item) => {
+	let plotData = plot[0];
+	let countyData = county[0];
+
+	let response = {
+		messages: [],
+		countyData: null
+	}
+
+	let updateData = { data: {}, 'populate': '*' }
+
+	if (!countyData.plots) {
+		updateData.data.plots = [];
+	} else {
+		updateData.data.plots = countyData.plots;
+	}
+
+	let addToCounty = true;
+
+	for (const plotRelation of updateData.data.plots) {
+		if (plotRelation.id === plotData.id) {
+			addToCounty = false;
+		}
+	}
+
+	if (addToCounty) {
+		updateData.data.plots.push({ id: plotData.id });
+		const updatedCounty = await strapi.entityService.update('api::county.county', countyData.id, updateData);
+
+		response.messages.push(`Added plot ${plotData.plotId} to ${countyData.countyName} county`);
+		response.countyData = updatedCounty;
+	} else {
+		response.messages.push(`Plot ${plotData.plotId} already attached to ${countyData.countyName} county`);
+	}
+
+	return response;
 }
 
 /**
@@ -174,7 +227,8 @@ const getCounty = async (item) => {
 				],
 				filters: {
 					countyName: item[countyName],
-				}
+				},
+				'populate': '*'
 			});
 
 			// if (
