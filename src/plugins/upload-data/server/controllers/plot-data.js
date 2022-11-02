@@ -20,8 +20,8 @@ const parseFile = (fileObject) => {
 		fileObject &&
 		fileObject.url
 	) {
-		// const parsedData = xlsx.parse(`/opt/app/public/${fileObject.url}`, { raw: false }); // docker
-		const parsedData = xlsx.parse(`public${fileObject.url}`, { raw: false }); // local
+		const parsedData = xlsx.parse(`/opt/app/public/${fileObject.url}`, { raw: false }); // docker
+		// const parsedData = xlsx.parse(`public${fileObject.url}`, { raw: false }); // local
 
 		if (
 			parsedData &&
